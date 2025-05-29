@@ -1,31 +1,29 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
-  name: admin-host-explore-shell
+  name: talos-wifi
   namespace: kube-system
 spec:
   selector:
     matchLabels:
-      app: admin-host-explore-shell
+      app: talos-wifi
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: admin-host-explore-shell
+        app: talos-wifi
       annotations:
         config.linkerd.io/shutdown-grace-period: 2s
     spec:
       hostNetwork: true
       serviceAccountName: config-map-create-reader
       containers:
-      - image: alpine:latest # registry.gitlab.centerionware.com/public-projects/talos-wifi:7cfcaeb8
+      - image: registry.gitlab.centerionware.com/public-projects/talos-wifi:7cfcaeb8
         metadata:
           annotations:
             config.linkerd.io/shutdown-grace-period: 2s
-        name: admin-host-explore-shell
-        command: ["/bin/sh"]
-        args: ["-c", "tail -f /dev/null"]
+        name: talos-wifi
         volumeMounts:
           - name: task-pv-storage
             mountPath: /host
