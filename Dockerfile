@@ -1,4 +1,5 @@
-FROM go as build
+FROM alpine:3.21.3 as build
+RUN apk add go
 COPY entrypoint.go /
 RUN go build entrypoint.go
 
