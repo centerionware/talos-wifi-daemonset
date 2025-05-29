@@ -242,19 +242,19 @@ func startWpaSupplicant(wifiIface, wpaConfPath string) {
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
 		fmt.Println("Error setting up stdout pipe:", err)
-		return
+		os.Exit(1)
 	}
 	stderrPipe, err := cmd.StderrPipe()
 	if err != nil {
 		fmt.Println("Error setting up stderr pipe:", err)
-		return
+		os.Exit(1)
 	}
 
 	// Start the wpa_supplicant process
 	err = cmd.Start()
 	if err != nil {
 		fmt.Println("Error starting wpa_supplicant:", err)
-		return
+		os.Exit(1)
 	}
 
 	// Use goroutines to read stdout and stderr and print to console in real-time
@@ -269,6 +269,7 @@ func startWpaSupplicant(wifiIface, wpaConfPath string) {
 	err = cmd.Wait()
 	if err != nil {
 		fmt.Println("wpa_supplicant process exited with error:", err)
+		os.Exit(1)
 	} else {
 		fmt.Println("wpa_supplicant process finished successfully.")
 	}

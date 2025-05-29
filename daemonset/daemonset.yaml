@@ -25,8 +25,6 @@ spec:
             config.linkerd.io/shutdown-grace-period: 2s
         name: talos-wifi
         volumeMounts:
-          - name: task-pv-storage
-            mountPath: /host
           - name: task-pv-storage-dev
             mountPath: /dev
           - name: task-pv-storage-sys
@@ -37,10 +35,6 @@ spec:
           capabilities:
             add: ["NET_ADMIN", "SYS_TIME"]
       volumes:
-        - name: task-pv-storage
-          hostPath:
-            path: /
-            type: Directory
         - name: task-pv-storage-dev
           hostPath:
             path: /dev
