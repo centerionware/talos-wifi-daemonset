@@ -15,6 +15,11 @@ Each node will have a configMap and three secrets available for wifi configurati
 
 Config map contains the wpa_supplicant.conf file as well as the name of the wifi interface that was autodetected. Currently only one wifi interface is supported at a time.
 
+Config map name:
+```
+$HOSTNAME-wifi-config
+```
+
 Secrets for enterprise wifi: 
 ```
 $HOSTNAME-wifi-client-key
@@ -22,4 +27,7 @@ $HOSTNAME-wifi-client-cert
 $HOSTNAME-wifi-ca-cert
 ```
 
-Entrypoint.sh was the original idea, I've moved it to a go program that does virtually the exact same stuff. 
+All the secrets and config will be stored in the kube-system namespace.
+
+Entrypoint.sh was the original idea, I've moved it to a go program that should do the exact same stuff.
+
