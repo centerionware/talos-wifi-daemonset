@@ -1,0 +1,23 @@
+stages:
+  - build_container
+
+build_container:
+  rules:
+    - if: $DESTROY == null
+      when: always
+  
+  image: docker:24.0
+  
+  stage: build_container
+  tags:
+    - Build
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - echo "The current project id number is $CI_PROJECT_ID"
+    - docker build --output type=docker -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+    - docker system prune -a -f || true
+    - docker builder prune -a -f || true
+

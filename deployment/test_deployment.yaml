@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-host-explore-shell
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: admin-host-explore-shell
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: admin-host-explore-shell
+      annotations:
+        config.linkerd.io/shutdown-grace-period: 2s
+    spec:
+      hostNetwork: true
+      serviceAccountName: config-map-create-reader
+      containers:
+      - image: alpine:latest
+        metadata:
+          annotations:
+            config.linkerd.io/shutdown-grace-period: 2s
+        name: admin-host-explore-shell
+        command: ["/bin/sh"]
+        args: ["-c", "tail -f /dev/null"]
+        volumeMounts:
+          - name: task-pv-storage
+            mountPath: /host
+          - name: task-pv-storage-dev
+            mountPath: /dev
+          - name: task-pv-storage-sys
+            mountPath: /sys
+          - name: task-pv-storage-proc
+            mountPath: /proc
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN", "SYS_TIME"]
+      volumes:
+        - name: task-pv-storage
+          hostPath:
+            path: /
+            type: Directory
+        - name: task-pv-storage-dev
+          hostPath:
+            path: /dev
+            type: Directory
+        - name: task-pv-storage-sys
+          hostPath:
+            path: /sys
+            type: Directory
+        - name: task-pv-storage-proc
+          hostPath:
+            path: /proc
+            type: Directory
