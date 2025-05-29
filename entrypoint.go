@@ -91,9 +91,7 @@ func main() {
 	// Start wpa_supplicant
 	fmt.Printf("Starting wpa_supplicant with interface: %s\n", wifiIface)
 	startWpaSupplicant(wifiIface, wpaConfPath)
-
-	// Keep container running (or replace with desired behavior)
-	select {}
+	// Errors are handled inside of startWpaSupplicant. 
 }
 
 func getWifiInterface() string {
