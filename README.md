@@ -22,3 +22,4 @@ $HOSTNAME-wifi-client-cert
 $HOSTNAME-wifi-ca-cert
 ```
 
+Entrypoint.sh was the original idea, I've moved it to a go program that does virtually the exact same stuff. 

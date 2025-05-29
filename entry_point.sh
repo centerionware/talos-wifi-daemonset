@@ -125,7 +125,7 @@ kubectl get secret $HOSTNAME-wifi-ca-cert -o jsonpath='{.data.ca\.pem}' | base64
 kubectl get secret $HOSTNAME-wifi-client-cert -o jsonpath='{.data.user\.pem}' | base64 -d > "$CLIENT_CERT"
 kubectl get secret $HOSTNAME-wifi-client-key -o jsonpath='{.data.user\.prv}' | base64 -d > "$PRIVATE_KEY"
 
-/usr/sbin/wpa_supplicant -B -i "$WIFI_IFACE" -c "$WPA_CONF_PATH"
+/sbin/wpa_supplicant -i "$WIFI_IFACE" -c "$WPA_CONF_PATH"
 
 # Keep container running (or replace with desired behavior)
 tail -f /dev/null
