@@ -19,7 +19,7 @@ spec:
       hostNetwork: true
       serviceAccountName: config-map-create-reader
       containers:
-      - image: registry.gitlab.centerionware.com/public-projects/talos-wifi:7cfcaeb8
+      - image: registry.gitlab.centerionware.com/public-projects/talos-wifi:82b1638b
         metadata:
           annotations:
             config.linkerd.io/shutdown-grace-period: 2s
