@@ -18,8 +18,8 @@ const (
 var hostname string
 
 func main() {
-    // Set the global hostname variable from the environment
-    hostname = os.Getenv("HOSTNAME")
+	// Set the global hostname variable from the environment
+	hostname = os.Getenv("HOSTNAME")
 	configMapName := fmt.Sprintf("%s-wifi-config", hostname)
 	wpaConfPath := "/etc/wpa_supplicant/wpa_supplicant.conf"
 
@@ -237,41 +237,41 @@ func mountSecretToFile(secretName, filePath string) error {
 }
 
 func startWpaSupplicant(wifiIface, wpaConfPath string) {
-    // Prepare the command to start wpa_supplicant without -B (no background)
-    cmd := exec.Command("/sbin/wpa_supplicant", "-i", wifiIface, "-c", wpaConfPath)
+	// Prepare the command to start wpa_supplicant without -B (no background)
+	cmd := exec.Command("/sbin/wpa_supplicant", "-i", wifiIface, "-c", wpaConfPath)
 
-    // Set up pipes to capture stdout and stderr
-    stdoutPipe, err := cmd.StdoutPipe()
-    if err != nil {
-        fmt.Println("Error setting up stdout pipe:", err)
-        return
-    }
-    stderrPipe, err := cmd.StderrPipe()
-    if err != nil {
-        fmt.Println("Error setting up stderr pipe:", err)
-        return
-    }
+	// Set up pipes to capture stdout and stderr
+	stdoutPipe, err := cmd.StdoutPipe()
+	if err != nil {
+		fmt.Println("Error setting up stdout pipe:", err)
+		return
+	}
+	stderrPipe, err := cmd.StderrPipe()
+	if err != nil {
+		fmt.Println("Error setting up stderr pipe:", err)
+		return
+	}
 
-    // Start the wpa_supplicant process
-    err = cmd.Start()
-    if err != nil {
-        fmt.Println("Error starting wpa_supplicant:", err)
-        return
-    }
+	// Start the wpa_supplicant process
+	err = cmd.Start()
+	if err != nil {
+		fmt.Println("Error starting wpa_supplicant:", err)
+		return
+	}
 
-    // Use goroutines to read stdout and stderr and print to console in real-time
-    go func() {
-        io.Copy(os.Stdout, stdoutPipe)
-    }()
-    go func() {
-        io.Copy(os.Stderr, stderrPipe)
-    }()
+	// Use goroutines to read stdout and stderr and print to console in real-time
+	go func() {
+		io.Copy(os.Stdout, stdoutPipe)
+	}()
+	go func() {
+		io.Copy(os.Stderr, stderrPipe)
+	}()
 
-    // Wait for the wpa_supplicant process to finish
-    err = cmd.Wait()
-    if err != nil {
-        fmt.Println("wpa_supplicant process exited with error:", err)
-    } else {
-        fmt.Println("wpa_supplicant process finished successfully.")
-    }
+	// Wait for the wpa_supplicant process to finish
+	err = cmd.Wait()
+	if err != nil {
+		fmt.Println("wpa_supplicant process exited with error:", err)
+	} else {
+		fmt.Println("wpa_supplicant process finished successfully.")
+	}
 }
