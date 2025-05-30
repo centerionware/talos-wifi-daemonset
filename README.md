@@ -8,7 +8,7 @@ The idea is it will use kernel parameters if found to generate an initial wpa_su
 
 On subsequent starts it will read from the configmaps for a wpa_supplicant.conf combined with the nodes hostname, this way each host can get it's own updates to wifi settings.
 
-The container has iw-tools and wpa_supplicant installed. This allows full configuration of enterprise grade wifi if there are wifi interfaces found on the system.
+The container has iw-tools and wpa_supplicant installed. This allows full configuration of enterprise security wifi if there are wifi interfaces found on the system.
 The container must run with elevated priviledges and on the host network of each node.
 
 Each node will have a configMap and three secrets available for wifi configuration
@@ -30,4 +30,47 @@ $HOSTNAME-wifi-ca-cert
 All the secrets and config will be stored in the kube-system namespace.
 
 Entrypoint.sh was the original idea, I've moved it to a go program that should do the exact same stuff.
+
+## Containers
+I modified the talos linux kernel following their documentation to generate a kernel image after enabling the networking/wireless options, adding the config80211 extensions to the kernel, and enabling every wifi driver as a module with any available options (eg: promiscuous mode) enabled.
+
+ghcr.io/centerionware/talos-wifi-daemonset:kernel-v1.10.0-16-g39b9c9f-dirty
+
+And a compiled image of this repo for the daemonset
+
+ghcr.io/centerionware/talos-wifi-daemonset:latest
+
+## How to use
+ *NOTE* This whole repo is mostly untested as of time of writing.
+
+Use the provided kernel image or a self built kernel image that enables wifi
+
+
+Create an iso that includes the kernel
+
+### Extremely untested, probably wont work
+Adding the kernel flags `--wifi-ssid=YOUR_SSID` and `--wifi-password=YOUR_WIFI_PASSWORD` - There are no options to configure enterprise security at bootoup. 
+
+### This is probably going to have a better shot at working
+To configure wifi, first bootstrap the node with ethernet and join it to a cluster, add the daemonset, then modify the kubernetes configMap in the namespace the daemonset lives in (kube-system by default) for the node (It will be named $HOSTNAME-wifi-config), and drop in a wpa_supplicant.conf. The certificates from the kubernetes secrets ($HOSTNAME-wifi-certname) will be placed into the container at /etc/certs/
+
+```s
+CERT_PATH="/etc/cert"
+
+# Define the paths for certificates
+CA_CERT="$CERT_PATH/ca.pem"
+CLIENT_CERT="$CERT_PATH/user.pem"
+PRIVATE_KEY="$CERT_PATH/user.prv"
+```
+
+
+## How to use with Omni
+
+idk
+
+## Missing features
+
+Multiple wifi connections from a single node
+Disabling - should add another value to the configMap 'Enabled' and if is falsey will cleanly exit without an error before trying to run anything.
+
 

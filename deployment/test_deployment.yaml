@@ -1,3 +1,11 @@
+##
+## DO NOT USE THIS
+##
+##
+## This is simply used to explore the talos node from within kubernetes, gives a shell to poke around and investigate. 
+##
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,7 +27,7 @@ spec:
       hostNetwork: true
       serviceAccountName: config-map-create-reader
       containers:
-      - image: alpine:latest # registry.gitlab.centerionware.com/public-projects/talos-wifi:7cfcaeb8
+      - image: alpine:latest 
         metadata:
           annotations:
             config.linkerd.io/shutdown-grace-period: 2s
