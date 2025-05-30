@@ -52,7 +52,7 @@ Create an iso that includes the kernel
 Adding the kernel flags `--wifi-ssid=YOUR_SSID` and `--wifi-password=YOUR_WIFI_PASSWORD` - There are no options to configure enterprise security at bootoup. 
 
 ### This is probably going to have a better shot at working
-To configure wifi, first bootstrap the node with ethernet and join it to a cluster, add the daemonset, then modify the kubernetes configMap in the namespace the daemonset lives in (kube-system by default) for the node (It will be named $HOSTNAME-wifi-config), and drop in a wpa_supplicant.conf. The certificates from the kubernetes secrets ($HOSTNAME-wifi-certname) will be placed into the container at /etc/certs/
+To configure wifi, first bootstrap the node with ethernet and join it to a cluster, add the daemonset, then modify the kubernetes configMap in the namespace the daemonset lives in (kube-system by default) for the node (It will be named $HOSTNAME-wifi-config), and drop in a wpa_supplicant.conf. The certificates from the kubernetes secrets ($HOSTNAME-wifi-certname) will be placed into the container at /etc/cert/
 
 ```s
 CERT_PATH="/etc/cert"
