@@ -70,7 +70,7 @@ idk
 
 ## Missing features
 
-Multiple wifi connections from a single node
-Disabling - should add another value to the configMap 'Enabled' and if is falsey will cleanly exit without an error before trying to run anything.
+* Multiple wifi connections from a single node
+* Disabling - should add another value to the configMap 'Enabled' and if is falsey will cleanly exit without an error before trying to run anything.
 
 
