@@ -71,6 +71,6 @@ idk
 ## Missing features
 
 * Multiple wifi connections from a single node
-* Disabling - should add another value to the configMap 'Enabled' and if is falsey will cleanly exit without an error before trying to run anything.
+* Disabling - If you need this modify the daemonset and use labels so it won't run on nodes with a specific label such as NO-WIFI or DISABLE-WIFI or whatever.
 
 
